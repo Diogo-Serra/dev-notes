@@ -1,0 +1,215 @@
+{
+  "main": {
+    "id": "0302b89658cb746d",
+    "type": "split",
+    "children": [
+      {
+        "id": "4a737ceda65ade4f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6d323127924e3792",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "82f15f95c080bd91",
+    "type": "split",
+    "children": [
+      {
+        "id": "11719a07f621194d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0489ee3163197fcb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "4b84273269222b7b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "fff69d9853e13a67",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1206a87c94f734b8",
+    "type": "split",
+    "children": [
+      {
+        "id": "02c9f3dd25ed02f8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3d0d6a330fe7a73d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "144398d8d1a4028d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "e865ae1fa9522046",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "41688d246c6772a8",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "5bff95e78a4f96c4",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "6d323127924e3792",
+  "lastOpenFiles": [
+    "Inbox/README.md",
+    "Inbox",
+    "Projects/Index_Projects.md",
+    "Projects/A-Maze-ing/A-Maze-ing.md",
+    "Projects/A-Maze-ing/Index_Projects.md",
+    "Projects/A-Maze-ing.py/README.md",
+    "Projects/A-Maze-ing.py",
+    "Projects/A-Maze-ing/Parser.md",
+    "Projects/A-Maze-ing/DFS - mazegen.md",
+    "Projects/A-Maze-ing/Classes.md",
+    "Projects/A-Maze-ing/BFS - mazegen.md",
+    "Projects/A-Maze-ing/App.md",
+    "Projects/A-Maze-ing",
+    "Areas/README.md",
+    "Areas",
+    "Resources/README.md",
+    "Resources/Python_Modules/Python Modules Index.md",
+    "Resources/Python_Modules/Ex3 - Python Collections.md",
+    "Resources/Python_Modules/Ex10 - Functional Programming.md",
+    "Resources/Python_Modules/Ex9 - Pydantic Models & Validation.md",
+    "Resources/Python_Modules/Ex8 - Virtual Environments & Packages.md",
+    "Resources/Python_Modules/Ex7 - Design Patterns.md",
+    "Resources/Python_Modules/Ex6 - Modules, Packages & Imports.md",
+    "Resources/Python_Modules/Ex5 - Abstract Classes & Polymorphism.md",
+    "Resources/Python_Modules/Ex4 - Context Managers & with.md",
+    "Resources/Python_Modules/Ex3 - Sets.md",
+    "Resources/Python_Modules/Ex2 - Exception Types.md",
+    "Resources/Python_Modules/Ex0 - Defining Functions & print.md",
+    "Resources/Python_Modules/Ex1 - Classes & Objects.md",
+    "Resources/Python_Modules/Ex0 - Basics.md",
+    "Resources/Python_Modules",
+    "Resources",
+    "Projects"
+  ]
+}
