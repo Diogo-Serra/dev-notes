@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "4a737ceda65ade4f",
+        "id": "d7ab09ba55ffda77",
         "type": "tabs",
         "children": [
           {
-            "id": "6d323127924e3792",
+            "id": "ab26a9082034ea2c",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Projects/A-Maze-ing/DFS - mazegen.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "DFS - mazegen"
             }
           }
         ]
@@ -176,19 +180,22 @@
       "bases:Create new base": false
     }
   },
-  "active": "6d323127924e3792",
+  "active": "ab26a9082034ea2c",
   "lastOpenFiles": [
+    "Projects/A-Maze-ing/DFS - mazegen.md",
+    "Projects/A-Maze-ing/bitwise_walls.png",
+    "Projects/A-Maze-ing/maze_cell_bitmask_encoding.svg",
+    "Projects/A-Maze-ing/Classes.md",
+    "Projects/A-Maze-ing/A-Maze-ing.md",
+    "Projects/A-Maze-ing/dfs_maze_stepper.html",
+    "Projects/A-Maze-ing/BFS - mazegen.md",
     "Inbox/README.md",
     "Inbox",
     "Projects/Index_Projects.md",
-    "Projects/A-Maze-ing/A-Maze-ing.md",
     "Projects/A-Maze-ing/Index_Projects.md",
     "Projects/A-Maze-ing.py/README.md",
     "Projects/A-Maze-ing.py",
     "Projects/A-Maze-ing/Parser.md",
-    "Projects/A-Maze-ing/DFS - mazegen.md",
-    "Projects/A-Maze-ing/Classes.md",
-    "Projects/A-Maze-ing/BFS - mazegen.md",
     "Projects/A-Maze-ing/App.md",
     "Projects/A-Maze-ing",
     "Areas/README.md",
@@ -207,7 +214,6 @@
     "Resources/Python_Modules/Ex2 - Exception Types.md",
     "Resources/Python_Modules/Ex0 - Defining Functions & print.md",
     "Resources/Python_Modules/Ex1 - Classes & Objects.md",
-    "Resources/Python_Modules/Ex0 - Basics.md",
     "Resources/Python_Modules",
     "Resources",
     "Projects"

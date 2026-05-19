@@ -1,0 +1,191 @@
+
+<style>
+#dfs-wrapper { background:#1a1b1e; border-radius:10px; padding:18px 20px; max-width:680px; font-size:13px; margin:0 auto; text-align:center; }
+#dfs-stage { text-align:left; }
+.step-btn { font-size:12px; padding:5px 14px; border-radius:6px; border:0.5px solid #3a3b3f; background:transparent; color:#c9cad1; cursor:pointer; }
+.step-btn:hover { background:#2a2b2f; }
+.step-btn:disabled { opacity:0.35; cursor:default; }
+</style>
+<h2 class="sr-only">Interactive DFS maze generation stepper — click Next to walk through each step</h2>
+
+<div id="dfs-wrapper">
+  <div id="dfs-stage"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;">
+    <button class="step-btn" id="prev-btn" onclick="move(-1)" disabled>← Prev</button>
+    <span id="step-counter" style="font-size:13px;color:#ffffff;min-width:52px;"></span>
+    <button class="step-btn" id="next-btn" onclick="move(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+const STEPS = [
+  {
+    title: "Start — fill grid with 0xF",
+    desc: "Every cell begins with all 4 walls intact (value 0xF = 1111 in binary). The grid is a 2D list of integers. No passages exist yet.",
+    grid: [
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: null, visited: [], stack: [],
+    note: "grid = [[0xF]*WIDTH for _ in range(HEIGHT)]"
+  },
+  {
+    title: "Push entry cell onto stack",
+    desc: "We start at the entry cell (0,0). Push it onto the stack and mark it visited. The stack tracks our current path — if we get stuck, we backtrack.",
+    grid: [
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: [0,0], visited: [[0,0]], stack: [[0,0]],
+    note: "stack = [(0,0)]  visited = {(0,0)}"
+  },
+  {
+    title: "Carve EAST to (1,0)",
+    desc: "From (0,0) we randomly pick a direction. EAST leads to unvisited (1,0). We clear the EAST bit from (0,0) and the WEST bit from (1,0). Push (1,0) onto the stack.",
+    grid: [
+      [0xD,0xB,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: [1,0], visited: [[0,0],[1,0]], stack: [[0,0],[1,0]],
+    carved: [[0,0,'E'],[1,0,'W']],
+    note: "grid[0][0] &= ~EAST   grid[0][1] &= ~WEST"
+  },
+  {
+    title: "Carve SOUTH to (1,1)",
+    desc: "From (1,0) we move SOUTH to unvisited (1,1). Clear the SOUTH bit from (1,0) and the NORTH bit from (1,1). Stack grows deeper.",
+    grid: [
+      [0xD,0x9,0xF,0xF],
+      [0xF,0xE,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: [1,1], visited: [[0,0],[1,0],[1,1]], stack: [[0,0],[1,0],[1,1]],
+    note: "grid[0][1] &= ~SOUTH   grid[1][1] &= ~NORTH"
+  },
+  {
+    title: "Carve EAST to (2,1)",
+    desc: "From (1,1) we carve EAST to (2,1). The trail is getting longer — this is the winding corridor characteristic of DFS.",
+    grid: [
+      [0xD,0x9,0xF,0xF],
+      [0xF,0xC,0xB,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: [2,1], visited: [[0,0],[1,0],[1,1],[2,1]], stack: [[0,0],[1,0],[1,1],[2,1]],
+    note: "grid[1][1] &= ~EAST   grid[1][2] &= ~WEST"
+  },
+  {
+    title: "Dead end — backtrack!",
+    desc: "Suppose (2,1) has no unvisited neighbours. We POP it from the stack and backtrack to (1,1). The stack now points us back to try other directions from earlier cells.",
+    grid: [
+      [0xD,0x9,0xF,0xF],
+      [0xF,0xC,0xB,0xF],
+      [0xF,0xF,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: [1,1], visited: [[0,0],[1,0],[1,1],[2,1]], stack: [[0,0],[1,0],[1,1]],
+    note: "if not carved: stack.pop()  ← backtrack"
+  },
+  {
+    title: "Continue from (1,1) — carve SOUTH",
+    desc: "Back at (1,1) we pick SOUTH, which leads to unvisited (1,2). The algorithm keeps exploring until ALL cells are visited.",
+    grid: [
+      [0xD,0x9,0xF,0xF],
+      [0xF,0x8,0xB,0xF],
+      [0xF,0xE,0xF,0xF],
+      [0xF,0xF,0xF,0xF],
+    ],
+    current: [1,2], visited: [[0,0],[1,0],[1,1],[2,1],[1,2]], stack: [[0,0],[1,0],[1,1],[1,2]],
+    note: "grid[1][1] &= ~SOUTH   grid[2][1] &= ~NORTH"
+  },
+  {
+    title: "Maze complete — all cells visited",
+    desc: "When the stack is empty, every cell has been visited and connected. The result is a perfect maze: exactly one path between any two cells, no loops, no isolated regions.",
+    grid: [
+      [0xD,0x9,0x9,0x3],
+      [0x6,0x8,0x3,0x6],
+      [0x5,0xA,0x9,0x5],
+      [0x3,0x6,0x6,0xC],
+    ],
+    current: null, visited: 'all', stack: [],
+    note: "stack is empty → maze is complete!"
+  }
+];
+
+let cur = 0;
+
+const COLS = 4, ROWS = 4;
+const CS = 56;
+const OX = 40, OY = 60;
+
+function cellColor(x, y, step) {
+  const s = STEPS[step];
+  if (s.current && s.current[0]===x && s.current[1]===y) return '#534AB7';
+  if (s.visited === 'all') return '#1D9E75';
+  if (s.visited && s.visited.some(v=>v[0]===x&&v[1]===y)) return '#0F6E56';
+  return null;
+}
+
+function render() {
+  const s = STEPS[cur];
+  let svg = `<svg width="100%" viewBox="0 0 620 ${OY+ROWS*CS+80}" style="display:block">`;
+
+  // grid
+  for (let y=0; y<ROWS; y++) {
+    for (let x=0; x<COLS; x++) {
+      const cx = OX + x*CS, cy = OY + y*CS;
+      const val = s.grid[y][x];
+      const col = cellColor(x, y, cur);
+      svg += `<rect x="${cx+1}" y="${cy+1}" width="${CS-2}" height="${CS-2}" rx="4" fill="${col||'#25262b'}" stroke="${col||'#3a3b3f'}" stroke-width="0.5"/>`;
+      svg += `<text x="${cx+CS/2}" y="${cy+CS/2+5}" text-anchor="middle" font-family="monospace" font-size="12" fill="#ffffff">${'0x'+val.toString(16).toUpperCase()}</text>`;
+
+      const wt = col ? '#fff' : '#c9cad1';
+      const wa = col ? 0.7 : 0.9;
+      const ww = 2.5;
+      if (val & 0x1) svg += `<line x1="${cx}" y1="${cy}" x2="${cx+CS}" y2="${cy}" stroke="${wt}" stroke-width="${ww}" opacity="${wa}"/>`; // N
+      if (val & 0x2) svg += `<line x1="${cx+CS}" y1="${cy}" x2="${cx+CS}" y2="${cy+CS}" stroke="${wt}" stroke-width="${ww}" opacity="${wa}"/>`; // E
+      if (val & 0x4) svg += `<line x1="${cx}" y1="${cy+CS}" x2="${cx+CS}" y2="${cy+CS}" stroke="${wt}" stroke-width="${ww}" opacity="${wa}"/>`; // S
+      if (val & 0x8) svg += `<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy+CS}" stroke="${wt}" stroke-width="${ww}" opacity="${wa}"/>`; // W
+    }
+  }
+
+  // stack visualisation (sidebar)
+  const sx = OX + COLS*CS + 30;
+  svg += `<text x="${sx}" y="${OY-8}" font-family="sans-serif" font-size="13" fill="#ffffff">Stack</text>`;
+  (s.stack||[]).slice().reverse().forEach((cell,i) => {
+    const isTop = i===0;
+    svg += `<rect x="${sx}" y="${OY+i*28}" width="74" height="22" rx="4" fill="${isTop?'#534AB7':'#25262b'}" stroke="${isTop?'#534AB7':'#3a3b3f'}" stroke-width="0.5"/>`;
+    svg += `<text x="${sx+37}" y="${OY+i*28+15}" text-anchor="middle" font-family="monospace" font-size="12" fill="#ffffff">(${cell[0]},${cell[1]})</text>`;
+  });
+  if (!s.stack || s.stack.length===0) {
+    svg += `<text x="${sx+37}" y="${OY+18}" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#ffffff">empty</text>`;
+  }
+
+  // code note
+  const noteY = OY + ROWS*CS + 22;
+  svg += `<rect x="${OX}" y="${noteY}" width="${COLS*CS+160}" height="26" rx="6" fill="#25262b" stroke="#3a3b3f" stroke-width="0.5"/>`;
+  svg += `<text x="${OX+12}" y="${noteY+17}" font-family="monospace" font-size="12" fill="#ffffff">${s.note}</text>`;
+
+  svg += '</svg>';
+
+  document.getElementById('dfs-stage').innerHTML = `
+    <div style="margin-bottom:6px">
+      <span style="font-size:15px;font-weight:600;color:#ffffff">${s.title}</span>
+    </div>
+    <p style="font-size:13px;color:#ffffff;margin:0 0 8px;line-height:1.5">${s.desc}</p>
+    ${svg}
+  `;
+  document.getElementById('step-counter').textContent = `${cur+1} / ${STEPS.length}`;
+  document.getElementById('prev-btn').disabled = cur === 0;
+  document.getElementById('next-btn').disabled = cur === STEPS.length - 1;
+}
+
+function move(d) { cur = Math.max(0, Math.min(STEPS.length-1, cur+d)); render(); }
+render();
+</script>
