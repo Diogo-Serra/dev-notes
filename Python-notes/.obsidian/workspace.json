@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "442a89ae5e2d8f16",
+        "id": "0fd0f1eee03646eb",
         "type": "tabs",
         "children": [
           {
-            "id": "71501f0e4c3a8496",
+            "id": "6346effbdcbc6d38",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Projects/A-Maze-ing/A-Maze-ing.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "A-Maze-ing"
             }
           }
         ]
@@ -176,14 +180,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "0489ee3163197fcb",
+  "active": "6346effbdcbc6d38",
   "lastOpenFiles": [
-    "Projects/A-Maze-ing/A-Maze-ing.md",
-    "Projects/A-Maze-ing/App.md",
-    "Projects/A-Maze-ing/Classes.md",
     "Projects/A-Maze-ing/Parser.md",
     "Projects/A-Maze-ing/DFS - mazegen.md",
     "Projects/A-Maze-ing/BFS - mazegen.md",
+    "Projects/A-Maze-ing/A-Maze-ing.md",
+    "Projects/A-Maze-ing/App.md",
+    "Projects/A-Maze-ing/Classes.md",
     "Projects/A-Maze-ing/bitwise_walls.png",
     "Projects/A-Maze-ing/maze_cell_bitmask_encoding.svg",
     "Projects/A-Maze-ing/dfs_maze_stepper.html",

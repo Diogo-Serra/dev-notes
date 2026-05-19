@@ -1,13 +1,13 @@
 ## Overview
 
-`parser.py` handles everything that happens **before** the maze is generated — reading `config.txt`, parsing its key-value pairs, and routing execution between startup and in-app reload.
+`parser.py` handles everything that happens **before** the maze is generated - reading `config.txt`, parsing its key-value pairs, and routing execution between startup and in-app reload.
 
 It exposes two functions:
 
-| Function | Role |
-|---|---|
-| `load_settings()` | Central dispatcher — validates, builds maze, launches app, handles all errors |
-| `settings_parser()` | Low-level file reader — parses `config.txt` into a `Settings` object |
+| Function            | Role                                                                          |
+| ------------------- | ----------------------------------------------------------------------------- |
+| `load_settings()`   | Central dispatcher - validates, builds maze, launches app, handles all errors |
+| `settings_parser()` | Low-level file reader - parses `config.txt` into a `Settings` object          |
 
 ---
 
@@ -49,11 +49,11 @@ The central entry point. Controls two execution paths via the `flag` parameter.
 
 ### Parameters
 
-| Parameter | Type | Description |
-|---|---|---|
-| `script_name` | `str` | `argv[0]` — validated only on `"init"` |
+| Parameter     | Type  | Description                                      |
+| ------------- | ----- | ------------------------------------------------ |
+| `script_name` | `str` | `argv[0]` - validated only on `"init"`           |
 | `config_file` | `str` | path to the config file (usually `"config.txt"`) |
-| `flag` | `str` | `"init"` for startup, `"run"` for in-app reload |
+| `flag`        | `str` | `"init"` for startup, `"run"` for in-app reload  |
 
 ### `flag = "init"` (startup)
 
@@ -70,7 +70,7 @@ if flag == "init":
 1. Validates the script name is exactly `a-maze-ing.py`
 2. Parses the config file
 3. Builds and generates the maze
-4. Launches `app.run()` — the interactive loop
+4. Launches `app.run()` - the interactive loop
 
 ### `flag = "run"` (in-app reload)
 
@@ -106,13 +106,13 @@ except (Exception, BaseException) as exceptional_error:
     exit(1)
 ```
 
-| Exception | Cause | Output |
-|---|---|---|
-| `ValidationError` | Pydantic field/model validator failed | Prints field location + message |
-| `FileNotFoundError` | `config.txt` not found | Prints file error |
-| `PermissionError` | No read access to config | Prints file error |
-| `ValueError` | Wrong script name, bad `=` syntax in config | Prints error message |
-| `Exception` | Anything unexpected | Prints unexpected error |
+| Exception           | Cause                                       | Output                          |
+| ------------------- | ------------------------------------------- | ------------------------------- |
+| `ValidationError`   | Pydantic field/model validator failed       | Prints field location + message |
+| `FileNotFoundError` | `config.txt` not found                      | Prints file error               |
+| `PermissionError`   | No read access to config                    | Prints file error               |
+| `ValueError`        | Wrong script name, bad `=` syntax in config | Prints error message            |
+| `Exception`         | Anything unexpected                         | Prints unexpected error         |
 
 > `ValidationError` loops through all errors in the exception, so if multiple fields fail at once, all of them are reported before exiting.
 
@@ -149,15 +149,15 @@ for line in _settings:
 1. Read the whole file as a string and split on newlines
 2. Skip blank lines and `#` comment lines
 3. Validate each line has exactly one `=`
-4. Split on `=` — left side becomes the key (uppercased), right side becomes the value
+4. Split on `=` - left side becomes the key (upper-cased), right side becomes the value
 5. Strip punctuation from the value (except commas, which are needed for tuples like `(0, 0)`)
 
-> `new_punctuation = punctuation.replace(',', '')` — removes all punctuation characters except `,` from values, so `(0, 0)` and `True` parse cleanly.
+> `new_punctuation = punctuation.replace(',', '')` - removes all punctuation characters except `,` from values, so `(0, 0)` and `True` parse cleanly.
 
 ### The `config.txt` format
 
 ```
-# This is a comment — ignored by the parser
+# This is a comment - ignored by the parser
 WIDTH=10
 HEIGHT=10
 ENTRY=(0, 0)
@@ -176,4 +176,4 @@ settings: Settings = Settings(**parsed_settings)
 return settings
 ```
 
-The parsed dict is unpacked into `Settings(...)`. Pydantic's validators run at this point — if anything is invalid, a `ValidationError` is raised and caught by `load_settings()`.
+The parsed dict is unpacked into `Settings(...)`. Pydantic's validators run at this point - if anything is invalid, a `ValidationError` is raised and caught by `load_settings()`.
