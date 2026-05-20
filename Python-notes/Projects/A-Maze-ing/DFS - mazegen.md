@@ -1,4 +1,4 @@
-## Part 1 — The Grid and Wall Encoding
+## Part 1 - The Grid and Wall Encoding
 
 The first thing to understand is how a maze is represented in memory. Each cell in the grid stores a **bit mask** - a single number where individual bits represent whether a wall exists in each direction.
 
