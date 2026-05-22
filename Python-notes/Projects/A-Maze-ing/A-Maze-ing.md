@@ -16,5 +16,6 @@ A Python maze generator and solver.
 | [[Projects/A-Maze-ing/Classes\|Classes]]             | `mazegen.py` - `Settings` (Pydantic model) and `MazeGenerator` class      |
 | [[Projects/A-Maze-ing/Parser\|Parser]]               | `parser.py` - config file parsing, error handling, execution routing      |
 | [[Projects/A-Maze-ing/DFS - mazegen\|DFS - mazegen]] | `mazegen.py` - DFS algorithm walkthrough, bitmask encoding, output format |
+| [[Navigational example\|Navigational]]               | An example of how navigation algorithm works                              |
 
 ---

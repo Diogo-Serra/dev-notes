@@ -2,10 +2,10 @@
 
 `mazegen.py` is the **core module** of the project. It defines two classes:
 
-| Class | Role |
-|---|---|
-| `Settings` | Pydantic model — validates and stores the maze configuration |
-| `MazeGenerator` | Generates, renders and saves the maze using DFS |
+| Class           | Role                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `Settings`      | Pydantic model - validates and stores the maze configuration |
+| `MazeGenerator` | Generates, renders and saves the maze using DFS              |
 
 Both are exported from the package's `__init__.py` so they can be used standalone:
 
@@ -32,15 +32,15 @@ A [Pydantic](https://docs.pydantic.dev/) `BaseModel` that validates all input be
 
 ### Fields
 
-| Field | Type | Constraints |
-|---|---|---|
-| `WIDTH` | `int` | 3 – 40 |
-| `HEIGHT` | `int` | 3 – 40 |
-| `ENTRY` | `tuple[int, int]` | must be in-bounds, not on `42` pattern |
-| `EXIT` | `tuple[int, int]` | must be in-bounds, not on `42` pattern, ≠ ENTRY |
-| `OUTPUT_FILE` | `str` | must start with a letter, only `a-z 0-9 _ -`, ends with `.txt` |
-| `PERFECT` | `bool` | `True` = no loops, `False` = extra passages added |
-| `SEED` | `int \| None` | optional — `None` = random each run |
+| Field         | Type              | Constraints                                                    |
+| ------------- | ----------------- | -------------------------------------------------------------- |
+| `WIDTH`       | `int`             | 3 – 40                                                         |
+| `HEIGHT`      | `int`             | 3 – 40                                                         |
+| `ENTRY`       | `tuple[int, int]` | must be in-bounds, not on `42` pattern                         |
+| `EXIT`        | `tuple[int, int]` | must be in-bounds, not on `42` pattern, ≠ ENTRY                |
+| `OUTPUT_FILE` | `str`             | must start with a letter, only `a-z 0-9 _ -`, ends with `.txt` |
+| `PERFECT`     | `bool`            | `True` = no loops, `False` = extra passages added              |
+| `SEED`        | `int \| None`     | optional - `None` = random each run                            |
 
 ---
 
@@ -48,7 +48,7 @@ A [Pydantic](https://docs.pydantic.dev/) `BaseModel` that validates all input be
 
 Pydantic validators run automatically when `Settings(...)` is called. There are three:
 
-#### `parse_tuple` — `@field_validator('ENTRY', 'EXIT', mode="before")`
+#### `parse_tuple` - `@field_validator('ENTRY', 'EXIT', mode="before")`
 
 ```python
 @classmethod
@@ -64,7 +64,7 @@ Runs **before** type conversion. Parses the raw string from `config.txt` (e.g. `
 
 ---
 
-#### `validator_output_file` — `@field_validator('OUTPUT_FILE', mode="after")`
+#### `validator_output_file` - `@field_validator('OUTPUT_FILE', mode="after")`
 
 ```python
 @classmethod
@@ -81,7 +81,7 @@ Returns the validated name unchanged if all checks pass, otherwise raises `Value
 
 ---
 
-#### `validator_maze` — `@model_validator(mode='after')`
+#### `validator_maze` - `@model_validator(mode='after')`
 
 ```python
 @model_validator(mode='after')
@@ -95,7 +95,7 @@ Runs **after all fields are validated**, so it can access the full object. Check
 - `ENTRY ≠ EXIT`
 - Neither `ENTRY` nor `EXIT` overlaps with a cell in the `42` pattern
 
-> `@model_validator` vs `@field_validator` — field validators check one field at a time, model validators check the whole object at once.
+> `@model_validator` vs `@field_validator` - field validators check one field at a time, model validators check the whole object at once.
 
 ---
 
@@ -120,20 +120,20 @@ The maze engine. Takes a validated `Settings` object and uses it to drive DFS ge
 
 ### Attributes
 
-| Attribute | Type | Description |
-|---|---|---|
-| `settings` | `Settings` | full config object |
-| `WIDTH / HEIGHT` | `int` | grid dimensions |
-| `ENTRY / EXIT` | `tuple[int, int]` | start and end coordinates |
-| `OUTPUT_FILE` | `str` | filename for saved maze |
-| `PERFECT` | `bool` | whether to add extra passages |
-| `SEED` | `int \| None` | RNG seed |
-| `grid` | `list[list[int]] \| None` | the maze — `None` until `generate()` runs |
-| `fixed` | `set[tuple[int, int]]` | cells blocked by the `42` pattern |
+| Attribute        | Type                      | Description                               |
+| ---------------- | ------------------------- | ----------------------------------------- |
+| `settings`       | `Settings`                | full config object                        |
+| `WIDTH / HEIGHT` | `int`                     | grid dimensions                           |
+| `ENTRY / EXIT`   | `tuple[int, int]`         | start and end coordinates                 |
+| `OUTPUT_FILE`    | `str`                     | filename for saved maze                   |
+| `PERFECT`        | `bool`                    | whether to add extra passages             |
+| `SEED`           | `int \| None`             | RNG seed                                  |
+| `grid`           | `list[list[int]] \| None` | the maze - `None` until `generate()` runs |
+| `fixed`          | `set[tuple[int, int]]`    | cells blocked by the `42` pattern         |
 
 ---
 
-### `_compute_fixed_cells(width, height)` — `@staticmethod`
+### `_compute_fixed_cells(width, height)` - `@staticmethod`
 
 ```python
 @staticmethod
@@ -161,7 +161,7 @@ two = [
 ]
 ```
 
-`1` = cell is part of the pattern (added to `fixed`). DFS pre-marks these as visited so it never carves through them — leaving them as solid walled islands.
+`1` = cell is part of the pattern (added to `fixed`). DFS pre-marks these as visited so it never carves through them - leaving them as solid walled islands.
 
 ---
 
@@ -199,7 +199,7 @@ FFFFFFF...
 Pathfinder   ← placeholder for future pathfinding output
 ```
 
-Each hex character is a single digit `0`–`F` representing the bitmask of walls remaining in that cell.
+Each hex character is a single digit `0`-`F` representing the bitmask of walls remaining in that cell.
 
 ---
 
@@ -232,9 +232,9 @@ Renders the maze as ASCII art in the terminal using ANSI escape codes.
 
 **Colors:**
 
-| Value | Effect |
-|---|---|
-| `"white"` | No extra color codes — uses terminal default |
-| `"blue"` | Applies `\033[94m` (bright blue) to walls |
+| Value     | Effect                                       |
+| --------- | -------------------------------------------- |
+| `"white"` | No extra color codes - uses terminal default |
+| `"blue"`  | Applies `\033[94m` (bright blue) to walls    |
 
 > `RESET = "\033[0m"` is appended after every colored segment to avoid color bleed.
