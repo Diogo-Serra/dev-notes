@@ -20,8 +20,19 @@
               "icon": "lucide-file",
               "title": "Navigational example"
             }
+          },
+          {
+            "id": "1078f2e2b1b4dc89",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -180,7 +191,7 @@
       "bases:Create new base": false
     }
   },
-  "active": "1e437296934379f9",
+  "active": "1078f2e2b1b4dc89",
   "lastOpenFiles": [
     "Python-notes/Projects/A-Maze-ing/Navigational example.md",
     "Python-notes/Projects/A-Maze-ing/DFS - mazegen.md"
