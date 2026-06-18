@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Python-notes/Projects/A-Maze-ing/DFS - mazegen.md",
+                "file": "Python-notes/Projects/Fly-in/Renderer.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "DFS - mazegen"
+              "title": "Renderer"
             }
           }
         ]
@@ -182,6 +182,13 @@
   },
   "active": "90a63d11a8f9aed3",
   "lastOpenFiles": [
+    "Python-notes/Projects/Fly-in/Pathfinder.md",
+    "Python-notes/Projects/Fly-in/Maps.md",
+    "Python-notes/Projects/Fly-in/Handler.md",
+    "Python-notes/Projects/Fly-in/Fly-in.md",
+    "Python-notes/Projects/Fly-in/App.md",
+    "Python-notes/Projects/Fly-in/dinic_algo_explainer.svg",
+    "Python-notes/Projects/Fly-in/Renderer.md",
     "Python-notes/Projects/A-Maze-ing/DFS - mazegen.md",
     "Python-notes/Projects/A-Maze-ing/Classes.md",
     "Python-notes/Projects/A-Maze-ing/A-Maze-ing.md",
