@@ -23,13 +23,13 @@ parent: dict[...] = {(sx, sy): None}        # how we got to each cell
 
 `parent` does two things at once:
 1. Tracks which cells have already been visited (if a cell is a key, it's been seen)
-2. Records the path backwards — every cell knows which cell it came from
+2. Records the path backwards - every cell knows which cell it came from
 
 ```python
 head = 0  # index into queue — avoids expensive pop(0) on a list
 ```
 
-Instead of `queue.pop(0)` (O(n)), a `head` pointer advances through the list. Same behaviour, no cost.
+Instead of `queue.pop(0)` (O(n)), a `head` pointer advances through the list. Same behavior, no cost.
 
 ---
 
@@ -52,7 +52,7 @@ while head < len(queue):
                 queue.append((nx, ny))
 ```
 
-A wall is open when its bit is **not set** — `(cell & wall_bit) == 0`. If the neighbour is in-bounds, not blocked, and not yet visited, it gets added to the queue with its parent recorded.
+A wall is open when its bit is **not set** - `(cell & wall_bit) == 0`. If the neighbor is in-bounds, not blocked, and not yet visited, it gets added to the queue with its parent recorded.
 
 ---
 
@@ -69,7 +69,7 @@ while cur is not None:
 path.reverse()          # entry → exit order
 ```
 
-If `(gx, gy)` is never added to `parent`, the exit was unreachable — `solve()` returns `None`.
+If `(gx, gy)` is never added to `parent`, the exit was unreachable - `solve()` returns `None`.
 
 ---
 
