@@ -77,11 +77,11 @@ connection: B-Z [max_link_capacity=2]
 | Line prefix   | Meaning                                      |
 | ------------- | -------------------------------------------- |
 | `# diff:name` | Map difficulty and display name (line 1)     |
-| `nb_drones:`  | Number of drones to route                   |
-| `start_hub:`  | Source hub — `name x y [metadata...]`        |
-| `end_hub:`    | Sink hub — `name x y [metadata...]`          |
+| `nb_drones:`  | Number of drones to route                    |
+| `start_hub:`  | Source hub - `name x y [metadata...]`        |
+| `end_hub:`    | Sink hub - `name x y [metadata...]`          |
 | `hub:`        | Intermediate hub                             |
-| `connection:` | Bidirectional link — `from-to [metadata...]` |
+| `connection:` | Bidirectional link - `from-to [metadata...]` |
 
 ### Hub metadata keys
 

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="220" viewBox="0 0 680 220">
+  <style>
+    @keyframes flow-pulse { 0%,100% { stroke-dashoffset: 0; } to { stroke-dashoffset: -24; } }
+    .fl { stroke-dasharray: 6 6; animation: flow-pulse 0.8s linear infinite; }
+  </style>
+  <defs>
+    <marker id="arr-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <!-- Saturated edges (faded out) -->
+  <line x1="116" y1="108" x2="214" y2="80"  stroke="#E24B4A" stroke-width="2" opacity="0.25"/>
+  <line x1="264" y1="78"  x2="364" y2="78"  stroke="#E24B4A" stroke-width="2" opacity="0.25"/>
+  <!-- New active path S → B → C → T -->
+  <line x1="116" y1="122" x2="214" y2="150" stroke="#1D9E75" stroke-width="2.5" class="fl" marker-end="url(#arr-g)"/>
+  <line x1="264" y1="152" x2="364" y2="78"  stroke="#1D9E75" stroke-width="2.5" class="fl" marker-end="url(#arr-g)"/>
+  <line x1="414" y1="80"  x2="514" y2="107" stroke="#1D9E75" stroke-width="2.5" class="fl" marker-end="url(#arr-g)"/>
+  <circle cx="90"  cy="115" r="22" fill="#2563EB" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="90"  y="115" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">S</text>
+  <circle cx="240" cy="78"  r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="240" y="78"  text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">A</text>
+  <circle cx="240" cy="152" r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="240" y="152" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">B</text>
+  <circle cx="390" cy="78"  r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="390" y="78"  text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">C</text>
+  <circle cx="390" cy="152" r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="390" y="152" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">D</text>
+  <circle cx="536" cy="112" r="22" fill="#0F9270" stroke="#0a7055" stroke-width="1.5"/>
+  <text x="536" y="112" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">T</text>
+  <text x="340" y="208" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#0F6E56">New path via longer route: S → B → C → T</text>
+</svg>

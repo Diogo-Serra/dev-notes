@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="220" viewBox="0 0 680 220">
+  <defs>
+    <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#E24B4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <!-- Saturated (full) edges -->
+  <line x1="116" y1="108" x2="214" y2="80"  stroke="#E24B4A" stroke-width="2.5" marker-end="url(#arr-r)"/>
+  <line x1="264" y1="78"  x2="364" y2="78"  stroke="#E24B4A" stroke-width="2.5" marker-end="url(#arr-r)"/>
+  <!-- Remaining capacity edges -->
+  <line x1="116" y1="122" x2="214" y2="150" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#arr-a)" opacity="0.5"/>
+  <line x1="264" y1="152" x2="364" y2="152" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#arr-a)" opacity="0.5"/>
+  <line x1="414" y1="80"  x2="514" y2="107" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#arr-a)" opacity="0.5"/>
+  <line x1="414" y1="152" x2="514" y2="120" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#arr-a)" opacity="0.5"/>
+  <!-- FULL labels -->
+  <text x="168" y="50" text-anchor="middle" font-size="10" font-weight="700" font-family="sans-serif" fill="#A32D2D">FULL</text>
+  <text x="314" y="62" text-anchor="middle" font-size="10" font-weight="700" font-family="sans-serif" fill="#A32D2D">FULL</text>
+  <circle cx="90"  cy="115" r="22" fill="#2563EB" stroke="#1d4ed8" stroke-width="1.5"/>
+  <text x="90"  y="115" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">S</text>
+  <circle cx="240" cy="78"  r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="240" y="78"  text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">A</text>
+  <circle cx="240" cy="152" r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="240" y="152" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">B</text>
+  <circle cx="390" cy="78"  r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="390" y="78"  text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">C</text>
+  <circle cx="390" cy="152" r="20" fill="#534AB7" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="390" y="152" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">D</text>
+  <circle cx="536" cy="112" r="22" fill="#0F9270" stroke="#0a7055" stroke-width="1.5"/>
+  <text x="536" y="112" text-anchor="middle" dy="0.35em" font-size="13" font-weight="600" font-family="sans-serif" fill="#fff">T</text>
+</svg>

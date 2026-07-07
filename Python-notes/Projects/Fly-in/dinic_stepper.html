@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinic's Algorithm — Step by Step</title>
+  <style>
+    /* Fallback CSS variables — Obsidian overrides these automatically */
+    :root {
+      --color-text-primary: #1f2937;
+      --color-text-secondary: #6b7280;
+      --color-text-tertiary: #9ca3af;
+      --color-border-secondary: #d1d5db;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-text-primary: #f3f4f6;
+        --color-text-secondary: #9ca3af;
+        --color-text-tertiary: #6b7280;
+        --color-border-secondary: #4b5563;
+      }
+    }
+    body {
+      margin: 0;
+      padding: 0 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: transparent;
+    }
+
+    /* SVG node circle groups */
+    .c-blue   circle { fill: #2563EB; stroke: #1d4ed8; stroke-width: 1.5; }
+    .c-blue   text   { fill: #fff; }
+    .c-purple circle { fill: #534AB7; stroke: #4338ca; stroke-width: 1.5; }
+    .c-purple text   { fill: #fff; }
+    .c-teal   circle { fill: #0F9270; stroke: #0a7055; stroke-width: 1.5; }
+    .c-teal   text   { fill: #fff; }
+
+    /* SVG text utility classes */
+    .ts { font-size: 11px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .th { font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; }
+
+    /* Step panels */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* Pills */
+    .pill       { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; }
+    .pill-blue  { background: #E6F1FB; color: #0C447C; }
+    .pill-amber { background: #FAEEDA; color: #633806; }
+    .pill-teal  { background: #E1F5EE; color: #085041; }
+    .pill-red   { background: #FCEBEB; color: #791F1F; }
+
+    /* Navigation dots */
+    .dot        { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin: 0 3px; background: var(--color-border-secondary); }
+    .dot.active { background: #534AB7; }
+
+    /* Flow animation */
+    @keyframes flow-pulse { 0%, 100% { stroke-dashoffset: 0; } to { stroke-dashoffset: -24; } }
+    .flow-line { stroke-dasharray: 6 6; animation: flow-pulse 0.8s linear infinite; }
+
+    /* Buttons */
+    button {
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border-secondary, #d1d5db);
+      background: transparent;
+      color: var(--color-text-primary, #1f2937);
+      cursor: pointer;
+    }
+    button:hover { background: rgba(83, 74, 183, 0.08); }
+  </style>
+</head>
+<body>
+
+<div style="padding: 1rem 0 0;">
+  <div style="display:flex; align-items:center; gap: 8px; margin-bottom: 1rem;">
+    <span id="dot0" class="dot active"></span>
+    <span id="dot1" class="dot"></span>
+    <span id="dot2" class="dot"></span>
+    <span id="dot3" class="dot"></span>
+    <span style="font-size:13px; color:var(--color-text-tertiary); margin-left:4px;" id="step-label">Step 1 of 4</span>
+  </div>
+
+  <div id="step0" class="step-panel active">
+    <p style="font-size:14px; margin:0 0 8px; color:var(--color-text-primary)"><span class="pill pill-blue">Phase 1 — BFS</span> &nbsp;Scout the shortest paths</p>
+    <p style="font-size:13px; color:var(--color-text-secondary); margin:0 0 12px;">Dinic starts by doing a BFS (breadth-first search) from S. BFS is like a ripple: it discovers all nodes 1 hop away, then 2 hops, then 3. This builds a "level graph" — nodes are grouped by how many hops from S they are. Only edges that go forward (to a higher level) are kept.</p>
+    <svg width="100%" viewBox="0 0 680 220">
+      <defs><marker id="a0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <text class="ts" x="90" y="25" text-anchor="middle" style="fill:var(--color-text-tertiary)">level 0</text>
+      <text class="ts" x="240" y="25" text-anchor="middle" style="fill:var(--color-text-tertiary)">level 1</text>
+      <text class="ts" x="390" y="25" text-anchor="middle" style="fill:var(--color-text-tertiary)">level 2</text>
+      <text class="ts" x="540" y="25" text-anchor="middle" style="fill:var(--color-text-tertiary)">level 3</text>
+      <line x1="116" y1="110" x2="214" y2="80"  stroke="#534AB7" stroke-width="1.5" marker-end="url(#a0)" fill="none"/>
+      <line x1="116" y1="120" x2="214" y2="150" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a0)" fill="none"/>
+      <line x1="264" y1="78"  x2="364" y2="78"  stroke="#534AB7" stroke-width="1.5" marker-end="url(#a0)" fill="none"/>
+      <line x1="264" y1="152" x2="364" y2="152" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a0)" fill="none"/>
+      <line x1="414" y1="78"  x2="514" y2="105" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a0)" fill="none"/>
+      <line x1="414" y1="152" x2="514" y2="120" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a0)" fill="none"/>
+      <g class="c-blue"><circle cx="90" cy="115" r="22" stroke-width="0.5"/><text class="th" x="90" y="115" text-anchor="middle" dominant-baseline="central">S</text></g>
+      <g class="c-purple"><circle cx="240" cy="78" r="20" stroke-width="0.5"/><text class="th" x="240" y="78" text-anchor="middle" dominant-baseline="central">A</text></g>
+      <g class="c-purple"><circle cx="240" cy="152" r="20" stroke-width="0.5"/><text class="th" x="240" y="152" text-anchor="middle" dominant-baseline="central">B</text></g>
+      <g class="c-purple"><circle cx="390" cy="78" r="20" stroke-width="0.5"/><text class="th" x="390" y="78" text-anchor="middle" dominant-baseline="central">C</text></g>
+      <g class="c-purple"><circle cx="390" cy="152" r="20" stroke-width="0.5"/><text class="th" x="390" y="152" text-anchor="middle" dominant-baseline="central">D</text></g>
+      <g class="c-teal"><circle cx="536" cy="112" r="22" stroke-width="0.5"/><text class="th" x="536" y="112" text-anchor="middle" dominant-baseline="central">T</text></g>
+    </svg>
+  </div>
+
+  <div id="step1" class="step-panel">
+    <p style="font-size:14px; margin:0 0 8px; color:var(--color-text-primary)"><span class="pill pill-amber">Phase 2 — DFS</span> &nbsp;Push flow along shortest paths</p>
+    <p style="font-size:13px; color:var(--color-text-secondary); margin:0 0 12px;">Now Dinic does a DFS (depth-first search) through the level graph, pushing as much flow as possible from S to T. It follows edges greedily until it either reaches T (success — record the flow) or gets stuck. When stuck, it backtracks and marks that edge as "dead" so it doesn't waste time on it again.</p>
+    <svg width="100%" viewBox="0 0 680 220">
+      <defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <line x1="116" y1="110" x2="214" y2="80"  stroke="#534AB7" stroke-width="1.5" marker-end="url(#a1)" fill="none" opacity="0.3"/>
+      <line x1="116" y1="120" x2="214" y2="150" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a1)" fill="none" opacity="0.3"/>
+      <line x1="264" y1="78"  x2="364" y2="78"  stroke="#534AB7" stroke-width="1.5" marker-end="url(#a1)" fill="none" opacity="0.3"/>
+      <line x1="264" y1="152" x2="364" y2="152" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a1)" fill="none" opacity="0.3"/>
+      <line x1="414" y1="78"  x2="514" y2="105" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a1)" fill="none" opacity="0.3"/>
+      <line x1="414" y1="152" x2="514" y2="120" stroke="#534AB7" stroke-width="1.5" marker-end="url(#a1)" fill="none" opacity="0.3"/>
+      <line x1="116" y1="108" x2="214" y2="80"  stroke="#EF9F27" stroke-width="3" class="flow-line" marker-end="url(#a1)" fill="none"/>
+      <line x1="264" y1="78"  x2="364" y2="78"  stroke="#EF9F27" stroke-width="3" class="flow-line" marker-end="url(#a1)" fill="none"/>
+      <line x1="414" y1="80"  x2="514" y2="107" stroke="#EF9F27" stroke-width="3" class="flow-line" marker-end="url(#a1)" fill="none"/>
+      <g class="c-blue"><circle cx="90" cy="115" r="22" stroke-width="0.5"/><text class="th" x="90" y="115" text-anchor="middle" dominant-baseline="central">S</text></g>
+      <g class="c-purple"><circle cx="240" cy="78" r="20" stroke-width="0.5"/><text class="th" x="240" y="78" text-anchor="middle" dominant-baseline="central">A</text></g>
+      <g class="c-purple"><circle cx="240" cy="152" r="20" stroke-width="0.5"/><text class="th" x="240" y="152" text-anchor="middle" dominant-baseline="central">B</text></g>
+      <g class="c-purple"><circle cx="390" cy="78" r="20" stroke-width="0.5"/><text class="th" x="390" y="78" text-anchor="middle" dominant-baseline="central">C</text></g>
+      <g class="c-purple"><circle cx="390" cy="152" r="20" stroke-width="0.5"/><text class="th" x="390" y="152" text-anchor="middle" dominant-baseline="central">D</text></g>
+      <g class="c-teal"><circle cx="536" cy="112" r="22" stroke-width="0.5"/><text class="th" x="536" y="112" text-anchor="middle" dominant-baseline="central">T</text></g>
+      <text class="ts" x="340" y="200" text-anchor="middle" style="fill:#BA7517">Flowing: S → A → C → T (path found!)</text>
+    </svg>
+  </div>
+
+  <div id="step2" class="step-panel">
+    <p style="font-size:14px; margin:0 0 8px; color:var(--color-text-primary)"><span class="pill pill-red">Blocking flow</span> &nbsp;Saturate every useful path in this round</p>
+    <p style="font-size:13px; color:var(--color-text-secondary); margin:0 0 12px;">Dinic keeps pushing flow via DFS until NO more paths exist in the current level graph. This is called finding a "blocking flow". Some edges are now full (saturated — shown in red). Others may still have spare capacity.</p>
+    <svg width="100%" viewBox="0 0 680 220">
+      <defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <line x1="116" y1="108" x2="214" y2="80"  stroke="#E24B4A" stroke-width="2.5" marker-end="url(#a2)" fill="none"/>
+      <line x1="116" y1="122" x2="214" y2="150" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#a2)" fill="none" opacity="0.5"/>
+      <line x1="264" y1="78"  x2="364" y2="78"  stroke="#E24B4A" stroke-width="2.5" marker-end="url(#a2)" fill="none"/>
+      <line x1="264" y1="152" x2="364" y2="152" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#a2)" fill="none" opacity="0.5"/>
+      <line x1="414" y1="80"  x2="514" y2="107" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#a2)" fill="none" opacity="0.5"/>
+      <line x1="414" y1="152" x2="514" y2="120" stroke="#EF9F27" stroke-width="2.5" marker-end="url(#a2)" fill="none" opacity="0.5"/>
+      <g class="c-blue"><circle cx="90" cy="115" r="22" stroke-width="0.5"/><text class="th" x="90" y="115" text-anchor="middle" dominant-baseline="central">S</text></g>
+      <g class="c-purple"><circle cx="240" cy="78" r="20" stroke-width="0.5"/><text class="th" x="240" y="78" text-anchor="middle" dominant-baseline="central">A</text></g>
+      <g class="c-purple"><circle cx="240" cy="152" r="20" stroke-width="0.5"/><text class="th" x="240" y="152" text-anchor="middle" dominant-baseline="central">B</text></g>
+      <g class="c-purple"><circle cx="390" cy="78" r="20" stroke-width="0.5"/><text class="th" x="390" y="78" text-anchor="middle" dominant-baseline="central">C</text></g>
+      <g class="c-purple"><circle cx="390" cy="152" r="20" stroke-width="0.5"/><text class="th" x="390" y="152" text-anchor="middle" dominant-baseline="central">D</text></g>
+      <g class="c-teal"><circle cx="536" cy="112" r="22" stroke-width="0.5"/><text class="th" x="536" y="112" text-anchor="middle" dominant-baseline="central">T</text></g>
+      <text class="ts" x="200" y="55" text-anchor="middle" style="fill:#A32D2D">FULL</text>
+      <text class="ts" x="325" y="55" text-anchor="middle" style="fill:#A32D2D">FULL</text>
+    </svg>
+  </div>
+
+  <div id="step3" class="step-panel">
+    <p style="font-size:14px; margin:0 0 8px; color:var(--color-text-primary)"><span class="pill pill-teal">Next round</span> &nbsp;BFS again with longer paths</p>
+    <p style="font-size:13px; color:var(--color-text-secondary); margin:0 0 12px;">After a blocking flow is found, Dinic runs BFS again. Now the shortest paths are gone (saturated), so BFS finds longer paths. Dinic repeats until BFS can't find T at all — that means maximum flow has been reached. Done!</p>
+    <svg width="100%" viewBox="0 0 680 220">
+      <defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <line x1="116" y1="108" x2="214" y2="80"  stroke="#E24B4A" stroke-width="2" fill="none" opacity="0.3"/>
+      <line x1="264" y1="78"  x2="364" y2="78"  stroke="#E24B4A" stroke-width="2" fill="none" opacity="0.3"/>
+      <line x1="116" y1="122" x2="214" y2="150" stroke="#1D9E75" stroke-width="2.5" class="flow-line" marker-end="url(#a3)" fill="none"/>
+      <line x1="264" y1="152" x2="364" y2="78"  stroke="#1D9E75" stroke-width="2.5" class="flow-line" marker-end="url(#a3)" fill="none"/>
+      <line x1="414" y1="80"  x2="514" y2="107" stroke="#1D9E75" stroke-width="2.5" class="flow-line" marker-end="url(#a3)" fill="none"/>
+      <g class="c-blue"><circle cx="90" cy="115" r="22" stroke-width="0.5"/><text class="th" x="90" y="115" text-anchor="middle" dominant-baseline="central">S</text></g>
+      <g class="c-purple"><circle cx="240" cy="78" r="20" stroke-width="0.5"/><text class="th" x="240" y="78" text-anchor="middle" dominant-baseline="central">A</text></g>
+      <g class="c-purple"><circle cx="240" cy="152" r="20" stroke-width="0.5"/><text class="th" x="240" y="152" text-anchor="middle" dominant-baseline="central">B</text></g>
+      <g class="c-purple"><circle cx="390" cy="78" r="20" stroke-width="0.5"/><text class="th" x="390" y="78" text-anchor="middle" dominant-baseline="central">C</text></g>
+      <g class="c-purple"><circle cx="390" cy="152" r="20" stroke-width="0.5"/><text class="th" x="390" y="152" text-anchor="middle" dominant-baseline="central">D</text></g>
+      <g class="c-teal"><circle cx="536" cy="112" r="22" stroke-width="0.5"/><text class="th" x="536" y="112" text-anchor="middle" dominant-baseline="central">T</text></g>
+      <text class="ts" x="340" y="200" text-anchor="middle" style="fill:#0F6E56">New path via longer route: S → B → C → T</text>
+    </svg>
+  </div>
+
+  <div style="display:flex; gap:8px; margin-top: 1rem;">
+    <button onclick="prevStep()" id="btn-prev" style="opacity:0.4; pointer-events:none;">Prev</button>
+    <button onclick="nextStep()" id="btn-next">Next step</button>
+  </div>
+</div>
+
+<script>
+let cur = 0;
+const total = 4;
+const labels = ['Step 1 of 4','Step 2 of 4','Step 3 of 4','Step 4 of 4'];
+function go(n) {
+  document.getElementById('step'+(cur)).classList.remove('active');
+  document.getElementById('dot'+cur).classList.remove('active');
+  cur = n;
+  document.getElementById('step'+cur).classList.add('active');
+  document.getElementById('dot'+cur).classList.add('active');
+  document.getElementById('step-label').textContent = labels[cur];
+  document.getElementById('btn-prev').style.opacity = cur===0?'0.4':'1';
+  document.getElementById('btn-prev').style.pointerEvents = cur===0?'none':'auto';
+  document.getElementById('btn-next').style.opacity = cur===total-1?'0.4':'1';
+  document.getElementById('btn-next').style.pointerEvents = cur===total-1?'none':'auto';
+}
+function nextStep(){ if(cur<total-1) go(cur+1); }
+function prevStep(){ if(cur>0) go(cur-1); }
+</script>
+</body>
+</html>

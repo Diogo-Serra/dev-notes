@@ -28,13 +28,44 @@ After `__init__` completes, the `Pathfinder` exposes:
 
 ---
 
-## Stage 1 — Dinic Max-Flow
+## Stage 1 - Dinic Max-Flow
 
 ### Why max-flow?
 
 The map is a **capacity-constrained graph**. Each hub can hold a limited number of drones, and each connection can carry a limited number per tick. Max-flow finds the maximum number of drones that can simultaneously move from start to end.
 
-![[dinic_algo_explainer.svg|697]]
+> [!info] How Dinic's Algorithm Works
+> BFS builds a level graph - then DFS saturates it. Repeat until no path remains.
+
+**Step 1 of 4 - Phase 1: BFS** - Scout the shortest paths
+
+Dinic starts by doing a BFS from S. BFS is like a ripple: it discovers all nodes 1 hop away, then 2 hops, then 3. This builds a **level graph** - nodes are grouped by how many hops from S they are. Only edges that go forward (to a higher level) are kept.
+
+![[dinic_step1_bfs.svg]]
+
+---
+
+**Step 2 of 4 - Phase 2: DFS** - Push flow along shortest paths
+
+Now Dinic does a DFS through the level graph, pushing as much flow as possible from S to T. It follows edges greedily until it either reaches T (success - record the flow) or gets stuck. When stuck, it backtracks and marks that edge as "dead" so it doesn't waste time on it again.
+
+![[dinic_step2_dfs.svg]]
+
+---
+
+**Step 3 of 4 - Blocking flow** — Saturate every useful path in this round
+
+Dinic keeps pushing flow via DFS until NO more paths exist in the current level graph. This is called finding a **blocking flow**. Some edges are now full (saturated - shown in red). Others may still have spare capacity.
+
+![[dinic_step3_blocking.svg]]
+
+---
+
+**Step 4 of 4 - Next round** - BFS again with longer paths
+
+After a blocking flow is found, Dinic runs BFS again. Now the shortest paths are gone (saturated), so BFS finds longer paths. Dinic repeats until BFS can't find T at all - that means maximum flow has been reached.
+
+![[dinic_step4_next.svg]]
 
 ### Node splitting
 
@@ -62,7 +93,7 @@ def _add_edge(self, from_node, to_node, capacity):
     self._graph[to_node].append([from_node, 0, len(self._graph[from_node]) - 1])
 ```
 
-Adds a directed edge and its **reverse edge** (with capacity 0). The reverse edge is essential to Dinic — it allows the algorithm to "undo" flow decisions.
+Adds a directed edge and its **reverse edge** (with capacity 0). The reverse edge is essential to Dinic - it allows the algorithm to "undo" flow decisions.
 
 Each edge is stored as `[neighbor, remaining_capacity, reverse_edge_index]`.
 
@@ -72,7 +103,7 @@ Each edge is stored as `[neighbor, remaining_capacity, reverse_edge_index]`.
 def _bfs(self, source, sink) -> bool:
 ```
 
-Builds a **level graph** — assigns each node a distance (level) from the source using BFS. Only edges with remaining capacity are followed.
+Builds a **level graph** - assigns each node a distance (level) from the source using BFS. Only edges with remaining capacity are followed.
 
 Returns `True` if the sink is reachable (i.e. more flow can still be pushed). The levels are stored in `self._level`.
 
@@ -107,7 +138,7 @@ Each BFS call builds a new level graph. Each DFS call pushes one unit of blockin
 
 ---
 
-## Stage 2 — `_extract_paths(used_flow, source_idx, sink_idx, hub_names)`
+## Stage 2 -`_extract_paths(used_flow, source_idx, sink_idx, hub_names)`
 
 After Dinic runs, the residual graph encodes **how much flow passed through each edge**. This stage reads that back and reconstructs individual drone paths.
 
@@ -119,13 +150,13 @@ After Dinic runs, the residual graph encodes **how much flow passed through each
 
 Then a recursive DFS traces one path at a time from source to sink, decrementing `remaining_flow` as it goes. Priority hubs are visited first (sorted by `self._priority_indices`).
 
-Returns `list[list[str]]` — one list of hub names per path found.
+Returns `list[list[str]]` - one list of hub names per path found.
 
-> Uses backtracking — if a dead end is hit, flow is restored and another branch is tried.
+> Uses backtracking - if a dead end is hit, flow is restored and another branch is tried.
 
 ---
 
-## Stage 3 — `_simulate(paths, start_name, end_name)`
+## Stage 3 - `_simulate(paths, start_name, end_name)`
 
 Takes the abstract paths and plays them out tick by tick, respecting real-time constraints that the flow graph doesn't model.
 
@@ -135,24 +166,24 @@ Takes the abstract paths and plays them out tick by tick, respecting real-time c
 drone_paths = [paths[i % len(paths)] for i in range(num_drones)]
 ```
 
-Distributes paths across drones using modulo — if there are more drones than paths, paths are reused.
+Distributes paths across drones using modulo - if there are more drones than paths, paths are reused.
 
 ### Per-tick loop
 
 Each tick:
 
-1. **Resolve in-transit drones** — any drone flagged `in_transit` advances one step and joins `just_arrived`.
-2. **Count hub occupancy** — builds a snapshot of how many drones are at each hub.
-3. **Try to move each drone** — sorted by how far they are from the end (furthest first, to avoid blocking).
+1. **Resolve in-transit drones** - any drone flagged `in_transit` advances one step and joins `just_arrived`.
+2. **Count hub occupancy** - builds a snapshot of how many drones are at each hub.
+3. **Try to move each drone** - sorted by how far they are from the end (furthest first, to avoid blocking).
 
 ### Two movement modes
 
-| Zone         | Capacity check                              | Move type     |
-| ------------ | ------------------------------------------- | ------------- |
-| Normal       | `hub_occupancy + 1 <= hub_cap`              | Instant move  |
-| `restricted` | `hub_occupancy + reserved < hub_cap`        | In-transit (takes 2 ticks) |
+| Zone         | Capacity check                       | Move type                  |
+| ------------ | ------------------------------------ | -------------------------- |
+| Normal       | `hub_occupancy + 1 <= hub_cap`       | Instant move               |
+| `restricted` | `hub_occupancy + reserved < hub_cap` | In-transit (takes 2 ticks) |
 
-> `restricted` hubs use a **reservation system** — the drone leaves its current hub and enters a "in-transit" state for one tick before arriving. This prevents multiple drones committing to the same restricted hub simultaneously.
+> `restricted` hubs use a **reservation system** - the drone leaves its current hub and enters a "in-transit" state for one tick before arriving. This prevents multiple drones committing to the same restricted hub simultaneously.
 
 ### Safety limit
 

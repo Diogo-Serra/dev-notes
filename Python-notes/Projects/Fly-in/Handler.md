@@ -2,12 +2,12 @@
 
 `handler.py` owns all file I/O for the project. It handles two jobs:
 
-| Job                  | Method               | When                          |
-| -------------------- | -------------------- | ----------------------------- |
-| Read a map file      | `read_map_file()`    | Menu option 1 — Select Map    |
-| Write a solution file| `write_solution()`   | Menu option 3 — after routing |
+| Job                   | Method             | When                          |
+| --------------------- | ------------------ | ----------------------------- |
+| Read a map file       | `read_map_file()`  | Menu option 1 - Select Map    |
+| Write a solution file | `write_solution()` | Menu option 3 - after routing |
 
-`FileHandler` is a Pydantic `BaseModel`, so the filename is validated the moment the object is created — before any file is opened.
+`FileHandler` is a Pydantic `BaseModel`, so the filename is validated the moment the object is created - before any file is opened.
 
 ---
 
@@ -26,19 +26,19 @@ class FileHandler(BaseModel):
 
 ### Fields
 
-| Field          | Type                  | Description                                        |
-| -------------- | --------------------- | -------------------------------------------------- |
-| `filename`     | `str`                 | The `.txt` filename — validated on creation        |
-| `name`         | `str`                 | Map display name, populated during parsing         |
-| `nb_drones`    | `str`                 | Raw drone count string, converted to `int` by `Map`|
-| `difficulty`   | `str`                 | Difficulty label, populated during parsing         |
-| `selected_map` | `Map \| None`         | The fully built `Map` object after parsing         |
-| `hub_list`     | `list[Hub]`           | Hubs accumulated during parsing                    |
-| `connections`  | `list[Connection]`    | Connections accumulated during parsing             |
+| Field          | Type               | Description                                         |
+| -------------- | ------------------ | --------------------------------------------------- |
+| `filename`     | `str`              | The `.txt` filename - validated on creation         |
+| `name`         | `str`              | Map display name, populated during parsing          |
+| `nb_drones`    | `str`              | Raw drone count string, converted to `int` by `Map` |
+| `difficulty`   | `str`              | Difficulty label, populated during parsing          |
+| `selected_map` | `Map \| None`      | The fully built `Map` object after parsing          |
+| `hub_list`     | `list[Hub]`        | Hubs accumulated during parsing                     |
+| `connections`  | `list[Connection]` | Connections accumulated during parsing              |
 
 ---
 
-### Validator — `filename_validator`
+### Validator - `filename_validator`
 
 ```python
 @field_validator('filename', mode='after')
@@ -64,14 +64,14 @@ Reads and parses the map file line by line, building up `self.hub_list` and `sel
 
 **Parsing rules:**
 
-| Line prefix   | Action                                                           |
-| ------------- | ---------------------------------------------------------------- |
-| `#`           | Comment — if line 1 and has `:`, splits into difficulty + name  |
-| `nb_drones:`  | Sets `self.nb_drones`                                            |
+| Line prefix   | Action                                                                         |
+| ------------- | ------------------------------------------------------------------------------ |
+| `#`           | Comment - if line 1 and has `:`, splits into difficulty + name                 |
+| `nb_drones:`  | Sets `self.nb_drones`                                                          |
 | `start_hub:`  | Parses hub data, injects `hub_type=start` into metadata, appends to `hub_list` |
 | `end_hub:`    | Parses hub data, injects `hub_type=end` into metadata, appends to `hub_list`   |
-| `hub:`        | Parses hub data, appends to `hub_list`                           |
-| `connection:` | Splits `from-to`, parses metadata, appends to `connections`      |
+| `hub:`        | Parses hub data, appends to `hub_list`                                         |
+| `connection:` | Splits `from-to`, parses metadata, appends to `connections`                    |
 
 **Hub data format** (after splitting the line value):
 
@@ -128,8 +128,8 @@ D1-B D2-C
 D1-Z D3-B
 ```
 
-- `D1-B` — Drone 1 moved to hub B
-- `D1-Z` — Drone 1 arrived at the end hub (recorded once, then removed from future ticks)
+- `D1-B` - Drone 1 moved to hub B
+- `D1-Z` - Drone 1 arrived at the end hub (recorded once, then removed from future ticks)
 - In `restricted` zones, the label is the connection ID (`from-to`) rather than the hub name
 
 > The file is written to `solution/<name>.txt` relative to the project root, creating the directory if it doesn't exist.

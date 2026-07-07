@@ -1,6 +1,6 @@
 ## Overview
 
-`renderer.py` handles the Pygame visualisation. It takes the already-computed `Pathfinder` result and animates it — drawing hubs, connections, and drone positions tick by tick on a fullscreen window.
+`renderer.py` handles the Pygame visualisation. It takes the already-computed `Pathfinder` result and animates it - drawing hubs, connections, and drone positions tick by tick on a fullscreen window.
 
 It has no routing logic of its own. It only reads `pathfinder.ticks` to know where drones are at each step.
 
@@ -83,7 +83,7 @@ Hubs that sit above a vertical connection have their name label pushed above the
 
 ---
 
-## Coordinate System — `_to_screen(x, y)`
+## Coordinate System - `_to_screen(x, y)`
 
 ```python
 def _to_screen(self, x: int, y: int) -> tuple[int, int]:
@@ -91,8 +91,8 @@ def _to_screen(self, x: int, y: int) -> tuple[int, int]:
 
 Converts map coordinates (arbitrary integers from the map file) into screen pixel positions. Two things happen:
 
-1. **Scale** — multiply by `self._scale` to stretch the map to fit the window.
-2. **Y-flip** — map Y increases upward (like a standard graph), screen Y increases downward. The formula inverts Y:
+1. **Scale** - multiply by `self._scale` to stretch the map to fit the window.
+2. **Y-flip** - map Y increases upward (like a standard graph), screen Y increases downward. The formula inverts Y:
 
 ```python
 sy = oy + map_h - (y - self._min_y) * self._scale
@@ -115,7 +115,7 @@ Takes the smaller of the horizontal and vertical fits so the map is never clippe
 
 ---
 
-## `run()` — The Main Loop
+## `run()` - The Main Loop
 
 ```python
 def run(self) -> None:
@@ -125,13 +125,13 @@ Handles input events and drives rendering until the user quits.
 
 ### Keyboard controls
 
-| Key     | Action                                      |
-| ------- | ------------------------------------------- |
-| `ESC`   | Quit                                        |
-| `P`     | Toggle play / pause                         |
-| `SPACE` | Advance one tick (only when paused)         |
-| `R`     | Reset to tick 0                             |
-| `L`     | Toggle hub/link labels on and off           |
+| Key     | Action                              |
+| ------- | ----------------------------------- |
+| `ESC`   | Quit                                |
+| `P`     | Toggle play / pause                 |
+| `SPACE` | Advance one tick (only when paused) |
+| `R`     | Reset to tick 0                     |
+| `L`     | Toggle hub/link labels on and off   |
 
 ### Auto-advance timing
 
@@ -169,7 +169,7 @@ Hub colour comes from `hub.metadata.get('color', 'white')` and is resolved throu
 
 ### `_draw_drones()`
 
-Reads `self._pf.ticks[self._tick]` — a list of hub names, one per drone — and counts how many drones are at each hub using a simple `dict`.
+Reads `self._pf.ticks[self._tick]` - a list of hub names, one per drone - and counts how many drones are at each hub using a simple `dict`.
 
 For each hub that has drones, draws an orange badge circle offset to the top-right of the hub circle, with the drone count number inside.
 

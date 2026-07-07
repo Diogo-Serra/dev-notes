@@ -27,7 +27,7 @@ Called from `fly-in.py` with `sys.argv`.
 **What it does:**
 
 1. Strips whitespace from each argument.
-2. Checks `argv[0]` is `"fly-in.py"` — if not, prints usage and returns.
+2. Checks `argv[0]` is `"fly-in.py"` - if not, prints usage and returns.
 3. Calls `app.run(script)` to start the menu loop.
 4. Catches errors with specific messages for each type.
 
@@ -40,9 +40,7 @@ Called from `fly-in.py` with `sys.argv`.
 | `ValueError`       | Error message directly                            |
 | `Exception`        | "Unexpected error: ..."                           |
 
-> `BaseException` is intentionally **not** caught — that would swallow `KeyboardInterrupt` and `SystemExit`, which should be allowed to propagate.
-
-> The module-level `from pydantic import ValidationError` is wrapped in a `try/except ImportError` with `exit(1)`. This is one of the valid uses of `exit()` inside an except — without it, the rest of the module would load and then crash with a `NameError` when `ValidationError` is referenced.
+> The module-level `from pydantic import ValidationError` is wrapped in a `try/except ImportError` with `exit(1)`. This is one of the valid uses of `exit()` inside an except - without it, the rest of the module would load and then crash with a `NameError` when `ValidationError` is referenced.
 
 ---
 
@@ -78,7 +76,7 @@ Uses Python's `match/case` (structural pattern matching, Python 3.10+) as a clea
 
 ### Menu Options
 
-#### `1` — Select Map
+#### `1` - Select Map
 
 ```python
 handler = FileHandler(filename=map_file)
@@ -88,7 +86,7 @@ _map.map_info()
 
 Opens the map selection sub-menu (`map_menu()`), creates a `FileHandler`, parses the file into a `Map`, and prints map info. Both `handler` and `_map` are stored for use in other options.
 
-#### `2` — See Map Info
+#### `2` - See Map Info
 
 ```python
 _map.map_info()
@@ -96,7 +94,7 @@ _map.map_info()
 
 Prints the current map's name, difficulty, drone count, and hub list. Guards against no map being selected.
 
-#### `3` — Navigation System
+#### `3` - Navigation System
 
 ```python
 pf = Pathfinder(_map)
@@ -105,7 +103,7 @@ Renderer(_map, pf).run()
 ```
 
 Three steps in sequence:
-1. `Pathfinder` runs the full algorithm — Dinic flow, path extraction, tick simulation.
+1. `Pathfinder` runs the full algorithm - Dinic flow, path extraction, tick simulation.
 2. `handler.write_solution()` writes the result to `solution/<name>.txt`.
 3. `Renderer` opens the Pygame window for animated playback.
 
