@@ -29,6 +29,12 @@ Welcome (you are here)
 ### A-Maze-ing
 [[Projects/A-Maze-ing/A-Maze-ing|A-Maze-ing]] — maze generator & solver in Python
 
+### Fly-in
+[[Projects/Fly-in/Fly-in|Fly-in]] — drone routing with Dinic's max-flow algorithm
+
+### Call_Me_Maybe
+[[Projects/Call_Me_Maybe/Call_Me_Maybe|Call_Me_Maybe]] — LLM function calling with constrained decoding
+
 ---
 
 ## Resources
