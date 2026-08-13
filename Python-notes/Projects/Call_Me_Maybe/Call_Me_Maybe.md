@@ -45,6 +45,7 @@ FunctionCallEngine
 | [[Projects/Call_Me_Maybe/Constrained Decoder\|Constrained Decoder]]                      | `decoder.py` - the core constrained-decoding algorithm                   |
 | [[Projects/Call_Me_Maybe/Engine\|Engine]]                                                | `engine.py` - orchestrates loading, the generation loop, and output      |
 | [[Projects/Call_Me_Maybe/Config\|Config]]                                                | `config.py` + `__main__.py` - env/CLI setup and layered error handling   |
+| [[Projects/Call_Me_Maybe/Resources\|Resources]]                                          | Reference links + AI usage disclosure, mirrored from the project README |
 
 ---
 

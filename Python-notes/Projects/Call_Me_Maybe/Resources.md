@@ -1,6 +1,6 @@
 ## Overview
 
-Reference material backing [[Projects/Call_Me_Maybe/Call_Me_Maybe|Call_Me_Maybe]], copied from the project's own `README.md` "Resources" section so it lives alongside the rest of the project notes.
+Reference material backing [[Projects/Call_Me_Maybe/Call_Me_Maybe|Call_Me_Maybe]], copied from the project's own `README.md` "Resources" section.
 
 ---
 
