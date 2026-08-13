@@ -83,15 +83,17 @@ loop (up to longest candidate length + 2 steps):
     if partial already equals a full candidate: stop
     remaining = candidates that still start with partial
     if none remain: stop (nothing valid left to generate)
-    logits = llm.get_logits_from_input_ids(ids)
+    logits = llm.get_logits_from_input_ids(ids), as a numpy array
+    masked = full-length array of -inf
     for every (token_id, token_text) in vocabulary:
         candidate_text = partial + token_text
         if candidate_text is a prefix of any string in `remaining`:
-            keep it as a contender, ranked by its logit
-    append the highest-logit contender; partial += its text
+            masked[token_id] = logits[token_id]   # unmask this contender
+    if masked has no finite value left: stop (masking removed every option)
+    best_id = numpy.argmax(masked); append it; partial += its text
 ```
 
-This is the literal masking step from constrained decoding: every token that would step outside all remaining candidates is discarded before comparing scores at all.
+This is the literal masking step from constrained decoding: every token that would step outside all remaining candidates is set to `-inf` before `numpy.argmax` picks the highest-scoring survivor.
 
 ---
 
@@ -105,13 +107,15 @@ Numbers don't have a fixed candidate list, so instead of an enum trie, each step
 
 ```
 loop (up to 12 steps):
-    logits = llm.get_logits_from_input_ids(ids)
-    peek at the model's own unconstrained top choice (highest logit, no filter)
+    logits = llm.get_logits_from_input_ids(ids), as a numpy array
+    peek at the model's own unconstrained top choice (numpy.argmax(logits), no filter)
     if partial is non-empty AND that top choice would break the number format:
         stop - the model itself is signalling "the number is done"
-    otherwise, among only `vocabulary.numeric_token_ids` (precomputed subset),
-    keep the highest-logit token whose text still matches NUMBER_PREFIX_RE
-    append it; partial += its text
+    otherwise, build a full-length -inf array, and among only
+    `vocabulary.numeric_token_ids` (precomputed subset), unmask every token
+    whose text still matches NUMBER_PREFIX_RE
+    if nothing is unmasked: stop
+    best_id = numpy.argmax(masked); append it; partial += its text
 ```
 
 > [!info] Why peek at the unconstrained top choice to decide when to stop?
@@ -129,6 +133,9 @@ def _generate_string(self, llm, input_ids) -> tuple[str, list[int]]:
 
 Same "peek the model's unconstrained choice to detect the stopping point" pattern as `_generate_number`, but the constraint itself is much looser: **any** token is allowed except ones containing a literal `"` or a newline, so the generated value can never break out of its JSON string boundary. Generation stops as soon as the model's own top pick would introduce one of those characters.
 
+> [!info] Why is this mask cached instead of rebuilt every step?
+> Unlike the enum trie or the number-prefix check, "does this token contain a quote or newline" never depends on `partial` - it's the same answer on step 1 as on step 20. So the decoder computes the set of safe token ids once per `ConstrainedDecoder` instance (`_get_string_safe_ids`) and reuses it every step, instead of re-scanning the whole vocabulary on each call.
+
 The final string is `.strip(" '\"")`-ed, trimming stray leading/trailing quote characters the model sometimes copies from the natural-language prompt (e.g. `'hello` → `hello`).
 
 ---
@@ -136,3 +143,14 @@ The final string is `.strip(" '\"")`-ed, trimming stray leading/trailing quote c
 ## Why this guarantees valid JSON
 
 None of these four generation methods ever produce a `{`, `}`, `:`, or `,` - the model is only ever asked for the *value* of one field at a time. [[Projects/Call_Me_Maybe/Engine|Engine]] assembles the actual `FunctionCallResult` object in Python from those values, so invalid JSON structure is structurally impossible, not just unlikely.
+
+---
+
+## Masking with `numpy`, not a hand-rolled best-tracker
+
+Every generator above follows the same two-step pattern instead of manually tracking a running best id/logit in a Python loop:
+
+1. Build a full-length logits array and set every invalid token's score to `-inf`.
+2. Call `numpy.argmax` on it to get the single highest-scoring valid token.
+
+An explicit `numpy.isfinite(masked).any()` check runs before the `argmax` call in every generator. Skipping it would be a real bug, not just a style nit: `numpy.argmax` on an array that is `-inf` everywhere silently returns index `0` instead of raising, so without the check a fully-masked step would silently emit a garbage token instead of stopping generation.

@@ -88,7 +88,7 @@ The problem with letting an LLM freely generate structured output (like JSON) is
 
 1. Get the logits for every possible next token (as above).
 2. Decide, using outside knowledge (a grammar, a schema, an allowed-values list), which of those tokens would keep the output valid.
-3. Discard every other token - conceptually, set their score to `-infinity` (or in this project's implementation, simply never consider them).
-4. Pick the best-scoring token among the survivors.
+3. Discard every other token by setting its score to `-infinity` (this project does this literally, via a masked `numpy` array).
+4. Pick the best-scoring token among the survivors (`numpy.argmax`).
 
 This guarantees the output can never leave the space of valid answers, no matter how the model would have behaved unconstrained. See [[Projects/Call_Me_Maybe/Constrained Decoder|Constrained Decoder]] for exactly how this project applies that idea to function names, numbers, strings, and booleans.
