@@ -48,11 +48,3 @@ Reference material backing [[Projects/Call_Me_Maybe/Call_Me_Maybe|Call_Me_Maybe]
 
 ---
 
-## How AI was used on this project
-
-An AI coding assistant (GitHub Copilot Chat) was used throughout development for:
-
-- Scaffolding the initial pydantic class structure (`FunctionDefinition`, `FunctionCallResult`, `Vocabulary`, `ConstrainedDecoder`, `FunctionCallEngine`).
-- Implementing and explaining the GPT-2 byte-level BPE reverse mapping needed to decode `vocab.json` into real token text.
-- Running the pipeline end-to-end and checking lint (`flake8`, `mypy`) after every change.
-- Drafting and iterating on this README.

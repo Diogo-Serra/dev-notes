@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Python-notes/Projects/Call_Me_Maybe/Call_Me_Maybe.md",
+                "file": "Python-notes/Projects/Call_Me_Maybe/Resources.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Call_Me_Maybe"
+              "title": "Resources"
             }
           }
         ]
@@ -185,11 +185,11 @@
   },
   "active": "4bd971f726efdbc7",
   "lastOpenFiles": [
+    "Python-notes/Projects/Call_Me_Maybe/Call_Me_Maybe.md",
     "Python-notes/Projects/Call_Me_Maybe/Resources.md",
     "Python-notes/Projects/Call_Me_Maybe/LLM Fundamentals.md",
     "Python-notes/Projects/Call_Me_Maybe/Constrained Decoder.md",
     "Python-notes/Projects/Call_Me_Maybe/Config.md",
-    "Python-notes/Projects/Call_Me_Maybe/Call_Me_Maybe.md",
     "Python-notes/Projects/Fly-in/Fly-in.md",
     "Python-notes/Projects/Fly-in/dinic_step4_next.svg",
     "Python-notes/Projects/Fly-in/dinic_step3_blocking.svg",
