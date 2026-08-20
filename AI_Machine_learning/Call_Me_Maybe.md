@@ -2,6 +2,8 @@
 
 *A guided lecture through language models and call_me_maybe project*
 
+Companion note to [[Projects/Call_Me_Maybe/Call_Me_Maybe\|Call_Me_Maybe]] - the Python function-calling project this lecture explains.
+
 ---
 
 ## Part 1 - How a Large Language Model Actually Works

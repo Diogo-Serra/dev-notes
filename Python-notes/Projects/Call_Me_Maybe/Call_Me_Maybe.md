@@ -46,6 +46,7 @@ FunctionCallEngine
 | [[Projects/Call_Me_Maybe/Engine\|Engine]]                                                | `engine.py` - orchestrates loading, the generation loop, and output      |
 | [[Projects/Call_Me_Maybe/Config\|Config]]                                                | `config.py` + `__main__.py` - env/CLI setup and layered error handling   |
 | [[Projects/Call_Me_Maybe/Resources\|Resources]]                                          | Reference links + AI usage disclosure, mirrored from the project README |
+| [[AI_Machine_learning/Call_Me_Maybe\|Understanding LLMs]]                                 | Guided lecture: tokenization, logits, autoregressive generation, and how constrained decoding solves function calling |
 
 ---
 
